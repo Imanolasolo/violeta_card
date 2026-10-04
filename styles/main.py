@@ -11,6 +11,10 @@ def load_styles():
         """
         <style>
 
+        :root {
+            color-scheme: light;
+        }
+
         /* =================================================
            RESET / STREAMLIT
            ================================================= */
@@ -31,6 +35,18 @@ def load_styles():
             display: none;
         }
 
+        html,
+        body,
+        .stApp,
+        [data-testid="stAppViewContainer"],
+        [data-testid="stHeader"],
+        [data-testid="stToolbar"],
+        [data-testid="stDecoration"] {
+            background: #ffffff !important;
+            color: #1b1b1b !important;
+            color-scheme: light;
+        }
+
         .block-container {
             max-width: 760px;
             padding-top: 1rem;
@@ -44,6 +60,25 @@ def load_styles():
 
         .stApp {
             background: #ffffff;
+            color: #1b1b1b;
+        }
+
+        .stApp,
+        .stApp p,
+        .stApp span,
+        .stApp div,
+        .stApp li,
+        .stApp label,
+        .stApp button,
+        .stApp input,
+        .stApp textarea,
+        .stApp a {
+            color: #1b1b1b;
+        }
+
+        .stApp a,
+        .stApp a:visited {
+            color: #222222;
         }
 
 
@@ -87,19 +122,33 @@ def load_styles():
             margin-bottom: 30px;
         }
 
-        .profile-photo {
+        .hero-media-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 14px;
+            flex-wrap: nowrap;
+        }
+
+        .hero-photo,
+        .hero-logo {
+            display: block;
+            object-fit: contain;
+        }
+
+        .hero-photo {
             width: 140px;
             height: 140px;
             border-radius: 50%;
             object-fit: cover;
-            margin-bottom: 18px;
         }
 
         .profile-photo-placeholder {
             width: 140px;
             height: 140px;
             border-radius: 50%;
-            margin: 0 auto 18px auto;
 
             display: flex;
             align-items: center;
@@ -108,6 +157,12 @@ def load_styles():
             background: #eeeeee;
             font-size: 32px;
             font-weight: 600;
+        }
+
+        .hero-logo {
+            width: 140px;
+            height: 140px;
+            margin-left: -4px;
         }
 
         .hero h1 {
@@ -258,6 +313,16 @@ def load_styles():
 
             .hero h1 {
                 font-size: 27px;
+            }
+
+            .hero-photo {
+                width: 118px;
+                height: 118px;
+            }
+
+            .hero-logo {
+                width: 118px;
+                height: 118px;
             }
 
             .actions {

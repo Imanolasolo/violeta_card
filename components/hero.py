@@ -2,8 +2,10 @@
 Hero / perfil principal de Violeta.
 """
 
+import base64
 from io import BytesIO
 from pathlib import Path
+from mimetypes import guess_type
 
 from PIL import Image, ImageChops
 import streamlit as st
@@ -31,6 +33,16 @@ def _load_logo_image(image_path):
     return buffer
 
 
+def _image_data_uri(image_path):
+    mime_type, _ = guess_type(image_path.as_posix())
+    if not mime_type:
+        mime_type = "image/png"
+
+    image_bytes = image_path.read_bytes()
+    encoded = base64.b64encode(image_bytes).decode("utf-8")
+    return f"data:{mime_type};base64,{encoded}"
+
+
 def render_hero(profile, language):
 
     # -----------------------------------------------------
@@ -53,24 +65,27 @@ def render_hero(profile, language):
     # RENDER
     # -----------------------------------------------------
 
-    photo_col, logo_col = st.columns([1.05, 0.75], gap="small")
+    photo_html = (
+        f'<img class="hero-photo" src="{_image_data_uri(photo_path)}" alt="{name}">'
+        if photo_path.exists()
+        else '<div class="profile-photo-placeholder">VM</div>'
+    )
 
-    with photo_col:
-        if photo_path.exists():
-            st.image(photo_path.as_posix(), width=124)
-        else:
-            st.markdown(
-                """
-                <div class="profile-photo-placeholder">
-                    VM
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+    logo_html = (
+        f'<img class="hero-logo" src="{_image_data_uri(logo_path)}" alt="{organization}">'
+        if logo_path.exists()
+        else ""
+    )
 
-    with logo_col:
-        if logo_path.exists():
-            st.image(_load_logo_image(logo_path), width=120)
+    st.markdown(
+        f"""
+        <div class="hero-media-row">
+            {photo_html}
+            {logo_html}
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     st.title(name)
     st.markdown(f"**{role}**")
