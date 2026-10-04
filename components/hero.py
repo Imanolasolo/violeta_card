@@ -2,11 +2,33 @@
 Hero / perfil principal de Violeta.
 """
 
+from io import BytesIO
 from pathlib import Path
 
+from PIL import Image, ImageChops
 import streamlit as st
 
 from utils.i18n import t
+
+
+def _trim_image_whitespace(image_path):
+    image = Image.open(image_path).convert("RGBA")
+    background = Image.new("RGBA", image.size, (255, 255, 255, 0))
+    difference = ImageChops.difference(image, background)
+    bounding_box = difference.getbbox()
+
+    if bounding_box:
+        image = image.crop(bounding_box)
+
+    return image
+
+
+def _load_logo_image(image_path):
+    image = _trim_image_whitespace(image_path)
+    buffer = BytesIO()
+    image.save(buffer, format="PNG")
+    buffer.seek(0)
+    return buffer
 
 
 def render_hero(profile, language):
@@ -31,11 +53,11 @@ def render_hero(profile, language):
     # RENDER
     # -----------------------------------------------------
 
-    photo_col, logo_col = st.columns(2)
+    photo_col, logo_col = st.columns([1.05, 0.75], gap="small")
 
     with photo_col:
         if photo_path.exists():
-            st.image(photo_path.as_posix(), width=140)
+            st.image(photo_path.as_posix(), width=124)
         else:
             st.markdown(
                 """
@@ -48,7 +70,7 @@ def render_hero(profile, language):
 
     with logo_col:
         if logo_path.exists():
-            st.image(logo_path.as_posix(), width=140)
+            st.image(_load_logo_image(logo_path), width=120)
 
     st.title(name)
     st.markdown(f"**{role}**")
