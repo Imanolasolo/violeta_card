@@ -50,7 +50,6 @@ def render_actions(profile, language):
         st.link_button(
             t({"es": "WhatsApp", "en": "WhatsApp"}, language),
             whatsapp_url,
-            type="primary",
             use_container_width=True,
         )
 
